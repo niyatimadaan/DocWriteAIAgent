@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 
 export async function POST(request: Request) {
   //   const { searchParams } = new URL(request.url);
-  let { name, email, link, access, htmlString } = await request.json();
+  let { email, doclink, document, access } = await request.json();
   const id = v4();
 
   try {
@@ -14,15 +14,11 @@ export async function POST(request: Request) {
       email = session?.user?.email || "null";
     }
     if (!email) throw new Error("Log In required");
-    if (!link) link = id;
-
-    await sql`
-        INSERT INTO docs (id ,docname, email , link, access)
-        VALUES ( ${id},${name}, ${email}, ${link}, ${access});`;
+    if (!doclink) throw new Error("Link required");
 
     await sql`
         INSERT INTO documents (doclink, document)
-        VALUES (${link}, ${htmlString});`;
+        VALUES (${doclink}, ${document});`;
 
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });

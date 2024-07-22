@@ -29,52 +29,54 @@ export default function TinymceEditor({
   const [question, setQuestion] = useState("");
   // debugger;
 
-  useEffect(() => {
-    if (urls.length > 0) {
-      fetch(`/api/auth/addDoc`, {
-        method: "POST",
-        body: JSON.stringify({
-          name: "Document",
-          email: "email",
-          link: urls[0],
-          access: "auth",
-        }),
-      });
-    }
-  }, [urls]);
+  // useEffect(() => {
+  //   if (urls.length > 0) {
+  //     fetch(`/api/auth/addDoc`, {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         name: "Document",
+  //         email: "email",
+  //         link: urls[0],
+  //         access: "auth",
+  //       }),
+  //     });
+  //   }
+  // }, [urls]);
 
-  const { startUpload, permittedFileInfo } = useUploadThing("textUploader", {
-    onClientUploadComplete: (responses) => {
-      responses.forEach((response) => {
-        // seturls(prevUrls => [...prevUrls, response.serverData.fileUrl]);
-        seturls([response.url]);
-      });
-    },
-    onUploadError: () => {
-      alert("error occurred while uploading");
-    },
-    onUploadBegin: () => {
-      // alert("upload has begun");
-    },
-  });
+  useEffect(() => {
+    setText(htmlData);
+  }, [htmlData]);
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (id != "") {
-      const link = "https://utfs.io/f/" + id + ".html";
-      console.log(link);
-      DeleteFunction(id);
-    }
     if (editorRef.current) {
       console.log(editorRef.current.getContent());
       let htmlString = editorRef.current.getContent();
-      let blob = new Blob([htmlString], { type: "text/html" });
-      let file = new File([blob], "document.html", { type: blob.type });
-      let fileArray = [file];
-      await startUpload(fileArray);
-      setLoading(false);
-      router.refresh();
-      router.push("/dashboard");
+      if (id != "") {
+        const a = await fetch(`/api/auth/updateDoc`, {
+          method: "POST",
+          body: JSON.stringify({
+            email: "email",
+            doclink: id,
+            document: htmlString,
+            access: "auth",
+          }),
+        });
+      } else {
+        const a = await fetch(`/api/auth/addDoc`, {
+          method: "POST",
+          body: JSON.stringify({
+            name: "Document",
+            email: "email",
+            link: id,
+            access: "auth",
+            htmlString: htmlString,
+          }),
+        });
+        setLoading(false);
+        router.refresh();
+        router.push("/dashboard");
+      }
     }
   };
 

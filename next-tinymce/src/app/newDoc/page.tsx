@@ -18,11 +18,9 @@ export default function NewDocPage() {
       setLoading(true);
       try {
         if (id) {
-          const response = fetch(`https://utfs.io/f/${id}.html`, {
-            method: "GET",
-          })
-          const re = await response;
-          const html = await re.text();
+          const response = await fetch(`/api/auth/getDoc?id=${id}`);
+          const data = await response.json();
+          const html = data.body[0].document;
           setHtml(html);
         }
       } catch (e) {

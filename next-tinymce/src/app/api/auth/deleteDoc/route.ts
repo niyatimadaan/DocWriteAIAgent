@@ -8,11 +8,16 @@ export async function DELETE(request: Request) {
   
   try {
     if (!link) throw new Error("link required");
-    await utapi.deleteFiles(link + ".html");
-    const link2 = "https://utfs.io/f/"+ link +".html";
+    // await utapi.deleteFiles(link + ".html");
+    // const link2 = "https://utfs.io/f/"+ link +".html";
+    const link2 = link;
 
     await sql`
            DELETE FROM docs WHERE link = ${link2};`;
+
+    await sql`
+            DELETE FROM documents WHERE doclink = ${link2};`;
+
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }

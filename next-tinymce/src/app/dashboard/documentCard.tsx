@@ -10,7 +10,7 @@ interface DocumentCardProps {
 }
 
 export const DocumentCardA: React.FC<DocumentCardProps> = ({ access, docname, email, id, link }) => {
-  const linkId = "/newDoc?id=" + link.slice(18,-5);
+  const linkId = "/newDoc?id=" + link;
   return (
     <div className="bg-white shadow-md p-4 rounded-md border border-gray-200 mr-4 mb-4 max-w-md">
       <h2 className="text-xl font-bold mb-6 overflow-ellipsis overflow-hidden whitespace-nowrap">{docname}</h2>

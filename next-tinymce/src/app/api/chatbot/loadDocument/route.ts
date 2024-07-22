@@ -1,30 +1,19 @@
-// pages/api/load-document.js
+// api/load-document/route.ts
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     const { htmlText, filePath } = await request.json();
+    console.log('htmlText:', process.env.FAST_API_URL);
     
     try {
-        const response = await axios.post('http://localhost:5000/load_document', {htmlText, filePath });
+        const response = await axios.post(process.env.FAST_API_URL + '/load_document', 
+            { htmlText, filePath },
+            { timeout: 120000 } // Timeout set to 2 minutes (120,000 milliseconds)
+        );
         return NextResponse.json(response.data, { status: 200 });
     } catch (error: any) {
+        console.log( error, error.message );
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
-
-// export default async function handler(req, res) {
-//   if (req.method === 'POST') {
-//     const { filePath } = req.body;
-
-//     try {
-//       const response = await axios.post('http://localhost:5000/load_document', { filePath });
-//       res.status(200).json(response.data);
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   } else {
-//     res.setHeader('Allow', ['POST']);
-//     res.status(405).end(`Method ${req.method} Not Allowed`);
-//   }
-// }
