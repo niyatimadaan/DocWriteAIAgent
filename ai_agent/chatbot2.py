@@ -9,7 +9,6 @@ from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core.agent import ReActAgent
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from llama_parse import LlamaParse
 import os
 import time
 import concurrent.futures
@@ -43,7 +42,6 @@ def load_document():
     file_path = request.json.get('filePath')
 
     if html_text:
-        parserll = LlamaParse(result_type="markdown")
         document_content = parser.parse_html_string(html_text)
         documents = [Document(text=document_content)]
     elif file_path:
