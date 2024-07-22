@@ -3,3 +3,5 @@
 /ai_agent/ai
 /ai_agent/.env
 /.vscode
+
+node_modules
