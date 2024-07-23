@@ -172,17 +172,17 @@ export default function TinymceEditor({
           </div>
         </p>
         {botopen && (
-          <div className="w-1/3 bg-gray-100 p-4 rounded-lg shadow-lg flex flex-col">
-            <div className="flex-grow overflow-y-auto">
+          <div className="w-1/3 bg-gray-100 p-4 rounded-lg shadow-lg flex flex-col mt-16">
+            <div className="flex-grow overflow-y-auto h-[calc(100vh-20rem)]">
               {responses.map((response, index) => (
                 <div key={index} className="mb-4">
                   <div className="flex">
-                    <div className="bg-blue-100 text-blue-900 p-2 rounded-lg mb-2 w-9/10">
+                    <div className="bg-blue-100 text-blue-900 p-2 rounded-lg mb-2 w-max-[90%]">
                       <strong className="block">Q:</strong> {response.question}
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <div className="bg-green-100 text-green-900 p-2 rounded-lg mb-2 w-9/10">
+                    <div className="bg-green-100 text-green-900 p-2 rounded-lg mb-2 w-max-[90%]">
                       <strong className="block">A:</strong> {response.answer}
                     </div>
                   </div>
