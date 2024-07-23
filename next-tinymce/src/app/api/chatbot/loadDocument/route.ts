@@ -1,4 +1,4 @@
-// api/load-document/route.ts
+// api/loadDocument/route.ts
 import axios from 'axios';
 import { NextResponse } from 'next/server';
 

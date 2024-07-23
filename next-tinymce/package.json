@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@huggingface/inference": "^2.8.0",
     "@tinymce/tinymce-react": "^4.3.2",
     "@uploadthing/react": "^6.2.2",
     "@vercel/postgres": "^0.7.2",

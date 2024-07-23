@@ -4,7 +4,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useEffect, useRef, useState } from "react";
 import clx from "classnames";
 import { EditorEvent, Editor as TinyMCEEditor } from "tinymce";
-import { useUploadThing } from "@/utils/uploadthing";
 import DeleteFunction from "../dashboard/deleteFunction";
 import { useRouter } from "next/navigation";
 import LoadingOverlay from "../components/loadingOverlay";
@@ -27,6 +26,7 @@ export default function TinymceEditor({
     { question: string; answer: any }[]
   >([]);
   const [question, setQuestion] = useState("");
+  const [content, setContent] = useState("");
   // debugger;
 
   // useEffect(() => {
@@ -84,17 +84,15 @@ export default function TinymceEditor({
     setLoading(true);
     console.log(editorRef.current?.getContent());
     let htmlString = editorRef.current?.getContent() || "";
-    let blob = new Blob([htmlString], { type: "text/html" });
-    let file = new File([blob], "document.html", { type: blob.type });
-    let fileArray = [file];
-    try {
-      const response = await axios.post("/api/chatbot/loadDocument", {
-        htmlText: htmlString,
-        filePath: "",
-      });
-    } catch (error: any) {
-      console.log({ error: error.message });
-    }
+    setContent(htmlString);
+    // try {
+    //   const response = await axios.post("/api/chatbot/loadDocument", {
+    //     htmlText: htmlString,
+    //     filePath: "",
+    //   });
+    // } catch (error: any) {
+    //   console.log({ error: error.message });
+    // }
     setLoading(false);
     setBotopen(true);
   };
@@ -103,7 +101,10 @@ export default function TinymceEditor({
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/api/chatbot/askQuestion", { question });
+      // const res = await axios.post("/api/chatbot/askQuestion", { question });
+      const context = content + responses.map((response) => 'Q:'+ response.question + 'A:'+response.answer).join("\n");
+      console.log("content", context);
+      const res = await axios.post("/api/chatbot/hf", { documentContent:context, question });
       setResponses([...responses, { question, answer: res.data.answer }]);
     } catch (error: any) {
       console.log({ error: error.message });
