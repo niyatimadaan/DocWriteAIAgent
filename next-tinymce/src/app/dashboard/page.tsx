@@ -32,7 +32,7 @@ export default function DashboardPage() {
             Add New
           </Link>
         </div>
-        <DocList documents={docs} />
+        <DocList documents={docs} setDocs={setDocs}/>
       </div>
     </>
   );

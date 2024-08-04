@@ -106,6 +106,7 @@ export default function TinymceEditor({
       console.log("content", context);
       const res = await axios.post("/api/chatbot/hf", { documentContent:content, question });
       setResponses([...responses, { question, answer: res.data.answer }]);
+      setQuestion("");
     } catch (error: any) {
       console.log({ error: error.message });
       console.log("error it is", error);
