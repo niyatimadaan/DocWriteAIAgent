@@ -1,15 +1,16 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/compat/router";
-import TinymceEditor from './document';
-import { useEffect, useState } from 'react';
+import TinymceEditor from "./document";
+import { useEffect, useState } from "react";
+import LoadingOverlay from "../components/loadingOverlay";
 
 export default function NewDocPage() {
   const searchParams = useSearchParams();
-  const id = searchParams.get('id');
+  const id = searchParams.get("id");
   // debugger;
-  const [html, setHtml] = useState('');
+  const [html, setHtml] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,13 +29,18 @@ export default function NewDocPage() {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchDoc();
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>; // Or any other loading indicator
+    return (
+      <div className="h-full">
+        Loading...
+        <LoadingOverlay />
+      </div>
+    ); // Or any other loading indicator
   }
 
   return <TinymceEditor htmlData={html} id={id || ""} />;
