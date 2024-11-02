@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   //   const { searchParams } = new URL(request.url);
   let { email, doclink, document, access } = await request.json();
   const id = v4();
-  console.log(email, doclink, document, access);
+  // console.log(email, doclink, document, access);
   try {
     if (email == "email") {
       const session = await getServerSession();
@@ -20,13 +20,13 @@ export async function POST(request: Request) {
     await sql`
         INSERT INTO documents (doclink, document)
         VALUES (${doclink}, ${document})
-        ON DUPLICATE KEY UPDATE;`;
-
+        ON CONFLICT (doclink) DO UPDATE SET document = EXCLUDED.document;`;
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error }, { status: 500 });
   }
 
   const docs = await sql`SELECT * FROM docs;`;
+  console.log(docs);
   return NextResponse.json({ docs }, { status: 200 });
 }

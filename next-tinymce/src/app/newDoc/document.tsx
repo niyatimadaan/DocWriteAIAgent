@@ -54,6 +54,7 @@ export default function TinymceEditor({ htmlData, id }: { htmlData: string; id: 
             access: "auth",
           }),
         });
+        setLoading(false);
       } else {
         const a = await fetch(`/api/auth/addDoc`, {
           method: "POST",
