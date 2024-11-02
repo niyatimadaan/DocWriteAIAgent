@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@huggingface/inference": "^2.8.0",
     "@tinymce/tinymce-react": "^4.3.2",
     "@uploadthing/react": "^6.2.2",

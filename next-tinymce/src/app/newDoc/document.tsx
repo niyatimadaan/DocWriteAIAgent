@@ -9,22 +9,14 @@ import { useRouter } from "next/navigation";
 import LoadingOverlay from "../components/loadingOverlay";
 import axios from "axios";
 
-export default function TinymceEditor({
-  htmlData,
-  id,
-}: {
-  htmlData: string;
-  id: string;
-}) {
+export default function TinymceEditor({ htmlData, id }: { htmlData: string; id: string }) {
   const router = useRouter();
   const [urls, seturls] = useState<string[]>([]);
   const [text, setText] = useState<string>(htmlData);
   const [loading, setLoading] = useState<Boolean>(false);
   const [botopen, setBotopen] = useState<Boolean>(false);
   const editorRef = useRef<TinyMCEEditor>();
-  const [responses, setResponses] = useState<
-    { question: string; answer: any }[]
-  >([]);
+  const [responses, setResponses] = useState<{ question: string; answer: any }[]>([]);
   const [question, setQuestion] = useState("");
   const [content, setContent] = useState("");
   // debugger;
@@ -102,9 +94,12 @@ export default function TinymceEditor({
     setLoading(true);
     try {
       // const res = await axios.post("/api/chatbot/askQuestion", { question });
-      const context = content + responses.map((response) => 'Q:'+ response.question + 'A:'+response.answer).join("\n");
+      const context =
+        content +
+        responses.map((response) => "Q:" + response.question + "A:" + response.answer).join("\n");
       console.log("content", context);
-      const res = await axios.post("/api/chatbot/hf", { documentContent:content, question });
+      // const res = await axios.post("/api/chatbot/hf", { documentContent:content, question });
+      const res = await axios.post("/api/chatbot/gemini", { documentContent: content, question });
       setResponses([...responses, { question, answer: res.data.answer }]);
       setQuestion("");
     } catch (error: any) {
@@ -121,9 +116,7 @@ export default function TinymceEditor({
           {loading ? <LoadingOverlay /> : <></>}
           <Editor
             apiKey="ebtmhhfkthrnkh4pgg688wablf9s5g49rei5p64zsxc66t3d"
-            onInit={(evt, editor) =>
-              (editorRef.current = editor as unknown as TinyMCEEditor)
-            }
+            onInit={(evt, editor) => (editorRef.current = editor as unknown as TinyMCEEditor)}
             initialValue={text}
             init={{
               height: 500,
@@ -153,8 +146,7 @@ export default function TinymceEditor({
                 "bold italic forecolor | alignleft aligncenter " +
                 "alignright alignjustify | bullist numlist outdent indent | " +
                 "removeformat | help",
-              content_style:
-                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             }}
           />
           <div className="mt-4">
@@ -183,9 +175,15 @@ export default function TinymceEditor({
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <div className="bg-green-100 text-green-900 p-2 rounded-lg mb-2 w-max-[90%]">
+                    {/* <div className="bg-green-100 text-green-900 p-2 rounded-lg mb-2 w-max-[90%]">
                       <strong className="block">A:</strong> {response.answer}
-                    </div>
+                    </div> */}
+                    <div
+                      className="bg-green-100 text-green-900 p-2 rounded-lg mb-2 w-max-[90%]"
+                      dangerouslySetInnerHTML={{
+                        __html: `<strong class="block">A:</strong> ${response.answer}`,
+                      }}
+                    ></div>
                   </div>
                   <hr className="mt-2" />
                 </div>
