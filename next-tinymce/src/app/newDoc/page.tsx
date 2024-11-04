@@ -12,6 +12,7 @@ export default function NewDocPage() {
   // debugger;
   const [html, setHtml] = useState("");
   const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("Document");
 
   useEffect(() => {
     // debugger;
@@ -23,6 +24,7 @@ export default function NewDocPage() {
           const data = await response.json();
           const html = data.body[0].document;
           setHtml(html);
+          setName(data.body[0].docname);
         }
       } catch (e) {
         console.error(e);
@@ -43,5 +45,5 @@ export default function NewDocPage() {
     ); // Or any other loading indicator
   }
 
-  return <TinymceEditor htmlData={html} id={id || ""} />;
+  return <TinymceEditor htmlData={html} id={id || ""} docname={name}/>;
 }

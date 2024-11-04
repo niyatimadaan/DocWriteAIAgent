@@ -15,9 +15,11 @@ export async function GET(request: Request) {
     const email = session?.user?.email || "null";
 
     const response = await sql`
-    Select document from documents
-    where doclink = ${id};`;
-    // console.log("res  ",response.rows[0]);
+    Select * from documents
+    left join docs on docs.link = documents.doclink
+    where doclink = ${id}
+    ;`;
+    console.log("res  ",response.rows[0]);
 
     return NextResponse.json({ message: "success", body: response.rows });
 
